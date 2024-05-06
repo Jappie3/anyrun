@@ -34,6 +34,7 @@ in
 
     cargoLock = {
       inherit lockFile;
+      outputHashes."hyprland-0.4.0-alpha.1" = "sha256-fQIcIxWZ/SvAN7jlc4iy2Sg6K+S124pymulcU0ZxEiM=";
     };
 
     checkInputs = [cargo rustc];
