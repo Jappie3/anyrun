@@ -9,6 +9,7 @@ use std::{env, fs, path::PathBuf, process::Command};
 pub struct Config {
     desktop_actions: bool,
     max_entries: usize,
+    hide_description: bool,
     terminal: Option<Terminal>,
     preprocess_exec_script: Option<PathBuf>,
 }
@@ -24,6 +25,7 @@ impl Default for Config {
         Self {
             desktop_actions: false,
             max_entries: 5,
+            hide_description: false,
             preprocess_exec_script: None,
             terminal: None,
         }
@@ -227,7 +229,11 @@ pub fn get_matches(input: RString, state: &State) -> RVec<Match> {
         .into_iter()
         .map(|(entry, id, _)| Match {
             title: entry.localized_name().into(),
-            description: entry.desc.clone().map(|desc| desc.into()).into(),
+            description: if state.config.hide_description {
+                ROption::RNone
+            } else {
+                entry.desc.clone().map(|desc| desc.into()).into()
+            },
             use_pango: false,
             icon: ROption::RSome(entry.icon.clone().into()),
             id: ROption::RSome(id),
